@@ -1,0 +1,107 @@
+/* Root container */
+.App {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  padding: 30px 24px;
+  max-width: 720px;
+  margin: 0 auto;
+  background-color: #f7f9fc;
+  color: #333;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* Title styling */
+.app-title {
+  font-weight: 700;
+  font-size: 2.25rem;
+  text-align: center;
+  margin-bottom: 32px;
+  color: #007acc;
+}
+
+/* Section common styling */
+.section {
+  margin-bottom: 36px;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 28px;
+}
+
+.section h2 {
+  color: #064663;
+  font-weight: 600;
+  margin-bottom: 14px;
+  font-size: 1.5rem;
+}
+
+/* Buttons container */
+.button-group .buttons-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  justify-content: flex-start;
+}
+
+.radio-group {
+  display: flex;
+  gap: 26px;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.toggle-group {
+  margin-top: 8px;
+}
+
+.input-group > * {
+  display: block;
+  width: 100%;
+  margin: 8px 0;
+}
+
+.progress-slider-group > h2 {
+  margin-top: 0;
+}
+
+.progress-slider-group > *:not(h2) {
+  margin-bottom: 18px;
+  display: block;
+}
+
+.spinners-row {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  margin-top: 12px;
+}
+
+/* Popup panel content styling */
+.popup-time {
+  color: #04b2f9;
+  font-weight: bold;
+  font-size: 1.38em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.popup-time span {
+  margin-left: 8px;
+  font-weight: bold;
+  font-size: 1.18em;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .button-group .buttons-row {
+    flex-direction: column;
+    gap: 12px;
+  }
+  .radio-group {
+    flex-direction: column;
+    gap: 12px;
+  }
+  .spinners-row {
+    flex-direction: column;
+    gap: 20px;
+  }
+}
