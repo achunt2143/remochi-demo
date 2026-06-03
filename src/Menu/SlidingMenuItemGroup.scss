@@ -1,0 +1,87 @@
+// ========================================
+// SlidingMenuItemGroup Component Styles
+// Remochi Design System
+// ========================================
+
+:root {
+  --menu-group-padding: var(--space-12, 12px) 0;
+  --menu-group-label-padding: var(--space-16, 16px) var(--space-16, 16px) var(--space-8, 8px);
+  --menu-group-label-text-color: var(--color-text-secondary, #666666);
+  --menu-group-label-font-size: 12px;
+  --menu-group-label-font-weight: 600;
+  --menu-group-label-text-transform: uppercase;
+  --menu-group-label-letter-spacing: 0.05em;
+  --menu-group-divider-color: var(--color-border, #e5e7eb);
+}
+
+// Menu item group container
+.sliding-menu-item-group {
+  padding: var(--menu-group-padding);
+  display: flex;
+  flex-direction: column;
+}
+
+// Group label/header
+.sliding-menu-item-group-label {
+  padding: var(--menu-group-label-padding);
+  color: var(--menu-group-label-text-color);
+  font-size: var(--menu-group-label-font-size);
+  font-weight: var(--menu-group-label-font-weight);
+  text-transform: var(--menu-group-label-text-transform);
+  letter-spacing: var(--menu-group-label-letter-spacing);
+  -webkit-user-select: none;
+  user-select: none;
+  pointer-events: none;
+}
+
+// Items container within group
+.sliding-menu-item-group-items {
+  display: flex;
+  flex-direction: column;
+}
+
+// Divider below group
+.sliding-menu-item-group--divider {
+  border-bottom: 1px solid var(--menu-group-divider-color);
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .sliding-menu-item-group {
+    padding: var(--space-8, 8px) 0;
+  }
+
+  .sliding-menu-item-group-label {
+    padding: var(--space-12, 12px) var(--space-16, 16px) var(--space-6, 6px);
+    font-size: 11px;
+  }
+}
+
+// Dark Mode Support
+@media (prefers-color-scheme: dark) {
+  :root {
+    --menu-group-label-text-color: #999999;
+    --menu-group-divider-color: #444444;
+  }
+}
+
+[data-color-scheme='dark'] {
+  .sliding-menu-item-group-label {
+    --menu-group-label-text-color: #999999;
+  }
+
+  .sliding-menu-item-group--divider {
+    --menu-group-divider-color: #444444;
+  }
+}
+
+// High Contrast Mode
+@media (prefers-contrast: more) {
+  .sliding-menu-item-group--divider {
+    border-bottom-width: 2px;
+  }
+
+  .sliding-menu-item-group-label {
+    font-weight: 700;
+  }
+}

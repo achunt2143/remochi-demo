@@ -1,0 +1,223 @@
+// ========================================
+// SlidingMenu Component Styles
+// Remochi Design System Integration
+// ========================================
+
+:root {
+  --sliding-menu-duration: var(--animation-duration, 300ms);
+  --sliding-menu-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --sliding-menu-bg: var(--color-surface, #ffffff);
+  --sliding-menu-text: var(--color-text, #333333);
+  --sliding-menu-border: var(--color-border, #e5e7eb);
+  --sliding-menu-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  --sliding-menu-z-index: 1000;
+}
+
+// Root menu element
+.remochi-sliding-menu {
+  position: fixed;
+  z-index: var(--sliding-menu-z-index);
+  background-color: var(--sliding-menu-bg);
+  overflow-y: auto;
+  overflow-x: hidden;
+  box-shadow: var(--sliding-menu-shadow);
+  transition: transform var(--sliding-menu-duration) var(--sliding-menu-ease),
+              opacity var(--sliding-menu-duration) var(--sliding-menu-ease);
+  -webkit-overflow-scrolling: touch;
+}
+
+.sliding-menu-inner {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+
+// LEFT Position
+.remochi-sliding-menu--left {
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: var(--menu-width, 280px);
+  flex-direction: column;
+  border-right: 1px solid var(--sliding-menu-border);
+  transform: translateX(-100%);
+
+  &.remochi-sliding-menu--open {
+    transform: translateX(0);
+  }
+}
+
+// RIGHT Position
+.remochi-sliding-menu--right {
+  top: 0;
+  right: 0;
+  height: 100vh;
+  width: var(--menu-width, 280px);
+  flex-direction: column;
+  border-left: 1px solid var(--sliding-menu-border);
+  transform: translateX(100%);
+
+  &.remochi-sliding-menu--open {
+    transform: translateX(0);
+  }
+}
+
+// TOP Position
+.remochi-sliding-menu--top {
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: auto;
+  max-height: 80vh;
+  flex-direction: row;
+  border-bottom: 1px solid var(--sliding-menu-border);
+  transform: translateY(-100%);
+
+  &.remochi-sliding-menu--open {
+    transform: translateY(0);
+  }
+
+  .sliding-menu-inner {
+    flex-direction: row;
+    align-items: center;
+    padding: var(--space-16, 16px) var(--space-24, 24px);
+  }
+}
+
+// BOTTOM Position
+.remochi-sliding-menu--bottom {
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: auto;
+  max-height: 80vh;
+  flex-direction: row;
+  border-top: 1px solid var(--sliding-menu-border);
+  transform: translateY(100%);
+
+  &.remochi-sliding-menu--open {
+    transform: translateY(0);
+  }
+
+  .sliding-menu-inner {
+    flex-direction: row;
+    align-items: center;
+    padding: var(--space-16, 16px) var(--space-24, 24px);
+  }
+}
+
+// Backdrop Overlay
+.sliding-menu-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: calc(var(--sliding-menu-z-index) - 1);
+  animation: slideMenuBackdropFadeIn var(--sliding-menu-duration) var(--sliding-menu-ease) forwards;
+  cursor: pointer;
+
+  @keyframes slideMenuBackdropFadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+}
+
+// Scrollbar Styling
+.remochi-sliding-menu {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.3);
+    }
+  }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .remochi-sliding-menu--left,
+  .remochi-sliding-menu--right {
+    --menu-width: 75vw;
+  }
+
+  .remochi-sliding-menu--top,
+  .remochi-sliding-menu--bottom {
+    max-height: 70vh;
+  }
+}
+
+// Accessibility - Reduced Motion
+@media (prefers-reduced-motion: reduce) {
+  .remochi-sliding-menu {
+    transition: none;
+  }
+
+  .sliding-menu-backdrop {
+    animation: none;
+  }
+}
+
+// High Contrast Mode
+@media (prefers-contrast: more) {
+  .remochi-sliding-menu {
+    border-width: 2px;
+    box-shadow: 0 0 0 1px var(--sliding-menu-text);
+  }
+}
+
+// Dark Mode Support
+@media (prefers-color-scheme: dark) {
+  :root {
+    --sliding-menu-bg: #1a1a1a;
+    --sliding-menu-text: #f0f0f0;
+    --sliding-menu-border: #444444;
+    --sliding-menu-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  }
+}
+
+[data-color-scheme='dark'] {
+  .remochi-sliding-menu {
+    --sliding-menu-bg: #1a1a1a;
+    --sliding-menu-text: #f0f0f0;
+    --sliding-menu-border: #444444;
+    --sliding-menu-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  }
+}
+
+[data-color-scheme='light'] {
+  .remochi-sliding-menu {
+    --sliding-menu-bg: #ffffff;
+    --sliding-menu-text: #333333;
+    --sliding-menu-border: #e5e7eb;
+    --sliding-menu-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  }
+}
+
+// Print Styles
+@media print {
+  .remochi-sliding-menu,
+  .sliding-menu-backdrop {
+    display: none;
+  }
+}
