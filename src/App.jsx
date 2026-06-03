@@ -1,31 +1,29 @@
 import React, { useRef, useState } from 'react';
 import './App.css';
 import 'remochi/styles';
-import { 
-  MochiButton, 
-  MochiInput, 
-  MochiPopupPanel, 
-  MochiProgressBar, 
-  MochiRadio, 
-  MochiSlider, 
-  MochiToggle, 
-  Spinner, 
-  StackedMochiPanel, 
-  StackedMochiPanels 
+import {
+  Button,
+  Input,
+  PopupPanel,
+  ProgressBar,
+  Radio,
+  Slider,
+  Toggle,
+  Spinner,
+  StackedPanel,
+  StackedPanels,
+  Dialog,
+  DateInput,
+  NumberInput,
+  Dropdown,
+  Table,
+  Pagination,
+  Item,
+  Video,
+  Wizard,
+  ThemeWrapper,
+  Divider,
 } from 'remochi';
-import { 
-  MochiDialog, 
-  MochiDateInput, 
-  MochiNumberInput, 
-  MochiDropdown, 
-  MochiTable, 
-  MochiPagination, 
-  MochiItem, 
-  MochiVideo, 
-  MochiWizard,
-  MochiThemeWrapper,
-  Divider
-} from 'remochi'; // Your new components
 import SlidingMenu from './Menu/SlidingMenu';
 import SlidingMenuItem from './Menu/SlidingMenuItem';
 import SlidingMenuItemGroup from './Menu/SlidingMenuItemGroup';
@@ -93,9 +91,9 @@ function AppContent() {
     { key: 'name', label: 'Name', width: '30%' },
     { key: 'email', label: 'Email', width: '35%' },
     { key: 'status', label: 'Status', width: '20%' },
-    { 
-      key: 'sales', 
-      label: 'Sales ($)', 
+    {
+      key: 'sales',
+      label: 'Sales ($)',
       width: '15%',
       render: (value) => `$${value.toLocaleString()}`
     },
@@ -115,8 +113,8 @@ function AppContent() {
       description: 'Let\'s start by collecting some basic information.',
       content: (
         <div>
-          <MochiInput placeholder="Full Name" />
-          <MochiInput placeholder="Email Address" type="email" />
+          <Input placeholder="Full Name" />
+          <Input placeholder="Email Address" type="email" />
         </div>
       ),
       onNext: () => true
@@ -126,8 +124,8 @@ function AppContent() {
       title: 'Your Preferences',
       content: (
         <div>
-          <MochiToggle checked={isOn} onChange={() => setIsOn(!isOn)} />
-          <MochiSlider value={slider} onChange={setSlider} />
+          <Toggle checked={isOn} onChange={() => setIsOn(!isOn)} />
+          <Slider value={slider} onChange={setSlider} />
         </div>
       )
     },
@@ -143,21 +141,6 @@ function AppContent() {
       skippable: false
     }
   ];
-
-  const Menu = () => (
-    <nav style={{ padding: '20px', background: '#667eea', color: 'white' }}>
-      <h2>Menu</h2>
-      <a href="#" style={{ display: 'block', color: 'white', marginBottom: '10px' }}>
-        Dashboard
-      </a>
-      <a href="#" style={{ display: 'block', color: 'white', marginBottom: '10px' }}>
-        Settings
-      </a>
-      <a href="#" style={{ display: 'block', color: 'white' }}>
-        Logout
-      </a>
-    </nav>
-  );
 
   return (
     <>
@@ -206,23 +189,23 @@ function AppContent() {
       >
         <div className="App" style={{ flex: 1 }}>
           <header className="app-header">
-            <MochiButton 
-            type="normal"
+            <Button
+              type="normal"
               onClick={() => setMenuOpen(!menuOpen)}
               className="menu-toggle"
             >
               ☰ Menu
-            </MochiButton>
+            </Button>
             <h1 className="app-title">Remochi Demo - Complete Components</h1>
-            <MochiButton type="normal" onClick={() => setWizardOpen(true)}>
+            <Button type="normal" onClick={() => setWizardOpen(true)}>
               Open Wizard
-            </MochiButton>
+            </Button>
           </header>
           <Divider />
           <div style={{margin: '16px'}} />
           <div className="demo-grid">
             <div className="main-content">
-              <StackedMochiPanels
+              <StackedPanels
                 ref={panelsRef}
                 index={activeIndex}
                 onIndexChange={(idx) => {
@@ -244,58 +227,58 @@ function AppContent() {
                 }}
               >
                 {/* Original Panels */}
-                <StackedMochiPanel>
+                <StackedPanel>
                   <section className="section button-group">
                     <h2>Buttons</h2>
                     <div className="buttons-row">
-                      <MochiButton type="normal">Button</MochiButton>
-                      <MochiButton type="dropdown" ref={buttonRef} onClick={openPopup}>
+                      <Button type="normal">Button</Button>
+                      <Button type="dropdown" ref={buttonRef} onClick={openPopup}>
                         Dropdown Button
-                      </MochiButton>
-                      <MochiButton type="warning" onClick={openPopup}>
+                      </Button>
+                      <Button type="warning" onClick={openPopup}>
                         Warning Button
-                      </MochiButton>
-                      <MochiButton type="disabled">Button Disabled</MochiButton>
+                      </Button>
+                      <Button type="disabled">Button Disabled</Button>
                     </div>
                   </section>
-                </StackedMochiPanel>
+                </StackedPanel>
 
-                <StackedMochiPanel>
+                <StackedPanel>
                   <section className="section radio-group">
                     <h2>Radios</h2>
-                    <MochiRadio
+                    <Radio
                       name="choice"
                       value="alpha"
                       checked={selected === "alpha"}
                       onChange={() => setSelected("alpha")}
                     >
                       Alpha
-                    </MochiRadio>
-                    <MochiRadio
+                    </Radio>
+                    <Radio
                       name="choice"
                       value="beta"
                       checked={selected === "beta"}
                       onChange={() => setSelected("beta")}
                     >
                       Beta
-                    </MochiRadio>
+                    </Radio>
                   </section>
-                </StackedMochiPanel>
+                </StackedPanel>
 
                 {/* New Components Panel */}
-                <StackedMochiPanel>
+                <StackedPanel>
                   <section className="section new-components">
                     <h2>New Components Demo</h2>
-                    
+
                     <div className="demo-row">
                       <div className="demo-card">
                         <h3>Date & Number Inputs</h3>
-                        <MochiDateInput
+                        <DateInput
                           label="Select Date"
                           value={dateValue}
                           onChange={setDateValue}
                         />
-                        <MochiNumberInput
+                        <NumberInput
                           label="Quantity"
                           value={numberValue}
                           min={0}
@@ -307,7 +290,7 @@ function AppContent() {
 
                       <div className="demo-card">
                         <h3>Dropdown</h3>
-                        <MochiDropdown
+                        <Dropdown
                           options={dropdownOptions}
                           value={dropdownValue}
                           onChange={setDropdownValue}
@@ -320,14 +303,14 @@ function AppContent() {
                     <div className="demo-row">
                       <div className="demo-card full-width">
                         <h3>Interactive Table</h3>
-                        <MochiTable
+                        <Table
                           columns={tableColumns}
                           data={tableData}
                           sortable
                           hoverable
                           striped
                         />
-                        <MochiPagination
+                        <Pagination
                           currentPage={tablePage}
                           totalPages={3}
                           onPageChange={setTablePage}
@@ -336,15 +319,15 @@ function AppContent() {
                       </div>
                     </div>
                   </section>
-                </StackedMochiPanel>
+                </StackedPanel>
 
                 {/* Video & Items Panel */}
-                <StackedMochiPanel>
+                <StackedPanel>
                   <section className="section video-items">
                     <div className="demo-row">
                       <div className="demo-card">
                         <h3>Video Player</h3>
-                        <MochiVideo
+                        <Video
                           src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
                           poster="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=400"
                           controls
@@ -353,65 +336,65 @@ function AppContent() {
 
                       <div className="demo-card">
                         <h3>List Items</h3>
-                        <MochiItem icon="👤" title="John Doe" subtitle="john@example.com">
+                        <Item icon="👤" title="John Doe" subtitle="john@example.com">
                           Software Engineer
-                        </MochiItem>
-                        <MochiItem 
-                          icon="📊" 
-                          title="Jane Smith" 
-                          subtitle="jane@example.com" 
+                        </Item>
+                        <Item
+                          icon="📊"
+                          title="Jane Smith"
+                          subtitle="jane@example.com"
                           rightContent="$2,500"
                           selected
                         >
                           Marketing Manager
-                        </MochiItem>
-                        <MochiItem 
-                          icon="🎨" 
-                          title="Bob Johnson" 
+                        </Item>
+                        <Item
+                          icon="🎨"
+                          title="Bob Johnson"
                           subtitle="bob@example.com"
                           variant="compact"
                         >
                           Designer
-                        </MochiItem>
+                        </Item>
                       </div>
                     </div>
                   </section>
-                </StackedMochiPanel>
+                </StackedPanel>
 
                 {/* Existing panels continue... */}
-                <StackedMochiPanel>
+                <StackedPanel>
                   <section className="section toggle-group">
                     <h2>Toggle</h2>
-                    <MochiToggle checked={isOn} onChange={() => setIsOn((on) => !on)} />
+                    <Toggle checked={isOn} onChange={() => setIsOn((on) => !on)} />
                   </section>
-                </StackedMochiPanel>
+                </StackedPanel>
 
-                <StackedMochiPanel>
+                <StackedPanel>
                   <section className="section input-group">
                     <h2>Inputs</h2>
-                    <MochiInput />
-                    <MochiInput placeholder="Enter text here" />
-                    <MochiInput placeholder="Search term" type="search" />
-                    <MochiInput placeholder="Enter password" type="password" />
-                    <MochiInput placeholder="Disabled input" disabled />
+                    <Input />
+                    <Input placeholder="Enter text here" />
+                    <Input placeholder="Search term" type="search" />
+                    <Input placeholder="Enter password" type="password" />
+                    <Input placeholder="Disabled input" disabled />
                   </section>
-                </StackedMochiPanel>
+                </StackedPanel>
 
-                <StackedMochiPanel>
+                <StackedPanel>
                   <section className="section progress-slider-group">
                     <h2>Progress Bars</h2>
-                    <MochiProgressBar value={slider} />
-                    <MochiProgressBar value={25} color="yellow" height="16px" />
-                    <MochiProgressBar value={80} color="red" width="300px" />
+                    <ProgressBar value={slider} />
+                    <ProgressBar value={25} color="yellow" height="16px" />
+                    <ProgressBar value={80} color="red" width="300px" />
 
                     <h2>Sliders</h2>
-                    <MochiSlider value={50} onChange={(v) => setSlider(v)} />
-                    <MochiSlider value={38} color="#ffb80d" width="280px" />
-                    <MochiSlider value={80} color="#d32f2f" />
+                    <Slider value={50} onChange={(v) => setSlider(v)} />
+                    <Slider value={38} color="#ffb80d" width="280px" />
+                    <Slider value={80} color="#d32f2f" />
                   </section>
-                </StackedMochiPanel>
+                </StackedPanel>
 
-                <StackedMochiPanel>
+                <StackedPanel>
                   <section className="section spinner-group">
                     <h2>Spinners</h2>
                     <div className="spinners-row">
@@ -420,8 +403,8 @@ function AppContent() {
                       <Spinner active={false} />
                     </div>
                   </section>
-                </StackedMochiPanel>
-              </StackedMochiPanels>
+                </StackedPanel>
+              </StackedPanels>
             </div>
 
             {/* Enhanced Control Panel */}
@@ -432,7 +415,7 @@ function AppContent() {
                 <label className="control-label">Current Panel: {activeIndex + 1}</label>
                 <div className="panel-buttons">
                   {[0,1,2,3,4,5,6].map((idx) => (
-                    <MochiButton
+                    <Button
                       key={idx}
                       type={idx === activeIndex ? "normal" : "secondary"}
                       size="small"
@@ -442,36 +425,36 @@ function AppContent() {
                       }}
                     >
                       {idx + 1}
-                    </MochiButton>
+                    </Button>
                   ))}
                 </div>
               </div>
 
               <div className="control-section">
-                <MochiButton 
-                  type="secondary" 
+                <Button
+                  type="secondary"
                   fullWidth
                   onClick={() => panelsRef.current?.prev()}
                 >
                   ← Previous
-                </MochiButton>
-                <MochiButton 
-                  type="normal" 
+                </Button>
+                <Button
+                  type="normal"
                   fullWidth
                   onClick={() => panelsRef.current?.next()}
                 >
                   Next →
-                </MochiButton>
+                </Button>
               </div>
 
               <div className="control-section">
-                <MochiButton 
-                  type="warning" 
+                <Button
+                  type="warning"
                   fullWidth
                   onClick={() => panelsRef.current?.toggleArrangement()}
                 >
                   Toggle Arrangement
-                </MochiButton>
+                </Button>
               </div>
 
               <div className="control-section">
@@ -490,7 +473,7 @@ function AppContent() {
           </div>
 
           {/* Popup Panel */}
-          <MochiPopupPanel
+          <PopupPanel
             isOpen={dialogOpen}
             onClose={() => setDialogOpen(false)}
             anchorRect={anchorRect}
@@ -503,16 +486,16 @@ function AppContent() {
             <div className="popup-time">
               11:00 am <span>▼</span>
             </div>
-          </MochiPopupPanel>
+          </PopupPanel>
 
           {/* New Components Dialogs */}
-          <MochiDialog
+          <Dialog
             isOpen={wizardOpen}
             onClose={() => setWizardOpen(false)}
             title="Setup Wizard"
             size="large"
           >
-            <MochiWizard
+            <Wizard
               steps={wizardSteps}
               onComplete={() => {
                 setWizardOpen(false);
@@ -520,7 +503,7 @@ function AppContent() {
               }}
               onCancel={() => setWizardOpen(false)}
             />
-          </MochiDialog>
+          </Dialog>
         </div>
       </SlidingMenu.ContentShifter>
     </>
@@ -529,9 +512,9 @@ function AppContent() {
 
 function App() {
   return (
-    <MochiThemeWrapper defaultTheme="light" fontFamily="Prelude">
+    <ThemeWrapper defaultTheme="light" fontFamily="Prelude">
       <AppContent />
-    </MochiThemeWrapper>
+    </ThemeWrapper>
   );
 }
 
