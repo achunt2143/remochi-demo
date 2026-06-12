@@ -1,44 +1,133 @@
 import React, { useRef, useState } from 'react';
 import './App.css';
 import {
-  MochiButton,
-  MochiRadio,
-  MochiToggle,
-  MochiInput,
-  MochiPopupPanel,
-  MochiProgressBar,
-  MochiSlider,
+  // Button family
+  Button,
+  Radio,
+  ViewSelectButton,
+  // Toggle
+  Toggle,
+  // Input family
+  Input,
+  RichText,
+  TextArea,
+  // Popup
+  PopupPanel,
+  // Progress & Slider
+  ProgressBar,
+  Slider,
+  // Spinner
   Spinner,
+  // Badge
+  Badge,
+  // Checkbox
+  Checkbox,
+  // Collapsable
+  Collapsable,
+  // DateInput
+  DateInput,
+  // Dialog
+  Dialog,
+  // Divider
+  Divider,
+  NubbinDivider,
+  // Dropdown
+  Dropdown,
+  // Headers
+  Header,
+  Subheader,
+  // Item
+  Item,
+  // Lists
+  List,
+  ListItem,
+  ListHeader,
+  GridList,
+  // MediaPlayer
+  Video,
+  // NumberInput
+  NumberInput,
+  // Pagination
+  Pagination,
+  // Panels
+  StackedPanels,
+  StackedPanel,
+  // Table
+  Table,
+  // ThemeWrapper
+  ThemeWrapper,
+  useTheme,
+  // Wizard
+  Wizard,
 } from 'remochi';
+
 import SlidingMenu from './Menu/SlidingMenu';
 import SlidingMenuItem from './Menu/SlidingMenuItem';
 import SlidingMenuItemGroup from './Menu/SlidingMenuItemGroup';
 
-function App() {
-  // ── remochi state ──────────────────────────────────────────────
-  const [selected, setSelected] = useState('alpha');
+// ── Inner app wrapped by ThemeWrapper ─────────────────────────────────────────
+function InnerApp() {
+  const { theme, setTheme } = useTheme();
+
+  // Shared state
+  const [log, setLog] = useState([]);
+  const addLog = (msg) => setLog((prev) => [msg, ...prev.slice(0, 9)]);
+
+  // Button / Popup
+  const dropdownBtnRef = useRef(null);
   const [popupOpen, setPopupOpen] = useState(false);
   const [anchorRect, setAnchorRect] = useState(null);
-  const [sliderVal, setSliderVal] = useState(50);
-  const [isOn, setIsOn] = useState(false);
-  const [log, setLog] = useState([]);
-  const dropdownBtnRef = useRef(null);
-
-  // ── SlidingMenu state ──────────────────────────────────────────
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [menuPosition, setMenuPosition] = useState('left');
-  const [activeNavItem, setActiveNavItem] = useState('dashboard');
-
-  const addLog = (msg) => setLog((prev) => [msg, ...prev.slice(0, 6)]);
-
   const openPopup = () => {
     if (dropdownBtnRef.current) {
-      const rect = dropdownBtnRef.current.getBoundingClientRect();
-      setAnchorRect({ top: rect.top, left: rect.left, bottom: rect.bottom, width: rect.width, height: rect.height });
+      setAnchorRect(dropdownBtnRef.current.getBoundingClientRect());
       setPopupOpen(true);
     }
   };
 
+  // Radio
+  const [radioVal, setRadioVal] = useState('alpha');
+
+  // Toggle
+  const [toggleOn, setToggleOn] = useState(false);
+
+  // Checkbox
+  const [checked, setChecked] = useState(false);
+
+  // Slider / ProgressBar
+  const [sliderVal, setSliderVal] = useState(50);
+
+  // NumberInput / DateInput
+  const [numVal, setNumVal] = useState(42);
+  const [dateVal, setDateVal] = useState('');
+
+  // Dropdown
+  const [dropdownVal, setDropdownVal] = useState('');
+  const dropdownOptions = [
+    { label: 'Option A', value: 'a' },
+    { label: 'Option B', value: 'b' },
+    { label: 'Option C', value: 'c' },
+  ];
+
+  // Dialog
+  const [dialogOpen, setDialogOpen] = useState(false);
+
+  // Collapsable
+  const [collapsed, setCollapsed] = useState(true);
+
+  // Pagination
+  const [page, setPage] = useState(1);
+
+  // ViewSelectButton
+  const [viewMode, setViewMode] = useState('grid');
+
+  // Wizard
+  const [wizardStep, setWizardStep] = useState(0);
+  const wizardSteps = ['Account', 'Profile', 'Review'];
+
+  // SlidingMenu
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [menuPosition, setMenuPosition] = useState('left');
+  const [activeNav, setActiveNav] = useState('dashboard');
   const navItems = [
     { id: 'dashboard', icon: '🏠', label: 'Dashboard' },
     { id: 'analytics', icon: '📊', label: 'Analytics' },
@@ -46,15 +135,17 @@ function App() {
     { id: 'messages', icon: '💬', label: 'Messages', badge: '12' },
   ];
 
-  const accountItems = [
-    { id: 'profile', icon: '👤', label: 'Profile' },
-    { id: 'settings', icon: '⚙️', label: 'Settings' },
-    { id: 'logout', icon: '🚪', label: 'Logout', variant: 'danger' },
+  // Table data
+  const tableColumns = ['Name', 'Role', 'Status'];
+  const tableRows = [
+    ['Alice', 'Engineer', 'Active'],
+    ['Bob', 'Designer', 'Away'],
+    ['Carol', 'PM', 'Active'],
   ];
 
   return (
     <>
-      {/* ── SlidingMenu (renders behind content) ─────────────────── */}
+      {/* ── SlidingMenu ────────────────────────────────────────────────── */}
       <SlidingMenu
         position={menuPosition}
         isOpen={menuOpen}
@@ -68,36 +159,19 @@ function App() {
               key={item.id}
               icon={item.icon}
               badge={item.badge}
-              isActive={activeNavItem === item.id}
-              onClick={() => {
-                setActiveNavItem(item.id);
-                setMenuOpen(false);
-                addLog(`Nav: ${item.label}`);
-              }}
+              isActive={activeNav === item.id}
+              onClick={() => { setActiveNav(item.id); setMenuOpen(false); addLog(`Nav: ${item.label}`); }}
             >
               {item.label}
             </SlidingMenuItem>
           ))}
         </SlidingMenuItemGroup>
-
         <SlidingMenuItemGroup label="Account" divider>
-          {accountItems.map((item) => (
-            <SlidingMenuItem
-              key={item.id}
-              icon={item.icon}
-              variant={item.variant || 'default'}
-              onClick={() => {
-                setMenuOpen(false);
-                addLog(`Account: ${item.label}`);
-              }}
-            >
-              {item.label}
-            </SlidingMenuItem>
-          ))}
+          <SlidingMenuItem icon="⚙️" onClick={() => { setMenuOpen(false); addLog('Settings'); }}>Settings</SlidingMenuItem>
+          <SlidingMenuItem icon="🚪" variant="danger" onClick={() => { setMenuOpen(false); addLog('Logout'); }}>Logout</SlidingMenuItem>
         </SlidingMenuItemGroup>
       </SlidingMenu>
 
-      {/* ── ContentShifter wraps all app content ─────────────────── */}
       <SlidingMenu.ContentShifter
         position={menuPosition}
         isMenuOpen={menuOpen}
@@ -106,181 +180,356 @@ function App() {
         duration={300}
       >
         <div className="App">
-          {/* ── Header ─────────────────────────────────────────────── */}
+
+          {/* ── App Header ─────────────────────────────────────────────── */}
           <header className="app-header">
-            <MochiButton type="normal" onClick={() => setMenuOpen((v) => !v)}>
-              ☰ Menu
-            </MochiButton>
-            <h1 className="app-title">Remochi Component Sampler</h1>
-            <span style={{ color: '#888', fontSize: 13, fontStyle: 'italic' }}>
-              Active: {activeNavItem}
-            </span>
+            <Button onClick={() => setMenuOpen((v) => !v)}>☰ Menu</Button>
+            <h1 className="app-title">Remochi Sampler</h1>
+            <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+              <span style={{ fontSize: 13, color: '#888' }}>Theme:</span>
+              <Button onClick={() => { setTheme(theme === 'light' ? 'dark' : 'light'); addLog(`Theme: ${theme === 'light' ? 'dark' : 'light'}`); }}>
+                {theme === 'light' ? '🌙 Dark' : '☀️ Light'}
+              </Button>
+            </div>
           </header>
 
-          {/* ── SlidingMenu controls ──────────────────────────────── */}
+          {/* ── Headers ────────────────────────────────────────────────── */}
           <section className="section">
-            <h2>SlidingMenu</h2>
-            <p style={{ color: '#666', marginBottom: 14, fontSize: 14 }}>
-              A menu that slides content to reveal itself from behind. Choose a position then click ☰ Menu above.
-            </p>
-            <div className="buttons-row" style={{ marginBottom: 12 }}>
-              {['left', 'right', 'top', 'bottom'].map((pos) => (
-                <MochiButton
-                  key={pos}
-                  type={menuPosition === pos ? 'normal' : 'dropdown'}
-                  onClick={() => { setMenuPosition(pos); addLog(`Menu position: ${pos}`); }}
-                >
-                  {pos}
-                </MochiButton>
-              ))}
-            </div>
-            <div className="menu-demo-note" style={{
-              background: '#f0f7ff',
-              border: '1px solid #c0d8f0',
-              borderRadius: 8,
-              padding: '10px 14px',
-              fontSize: 13,
-              color: '#555',
-            }}>
-              <strong>SlidingMenuItemGroup</strong> organises items into labelled sections with an optional divider.
-              {' '}<strong>SlidingMenuItem</strong> supports icon, badge, isActive, disabled, and variant="danger".
-            </div>
+            <Header>Header Component</Header>
+            <Subheader>Subheader Component — sits below a Header</Subheader>
           </section>
 
-          {/* ── MochiButton ──────────────────────────────────────── */}
-          <section className="section button-group">
-            <h2>MochiButton</h2>
+          <Divider />
+
+          {/* ── Button family ──────────────────────────────────────────── */}
+          <section className="section">
+            <h2>Button / Radio / ViewSelectButton</h2>
             <div className="buttons-row">
-              <MochiButton type="normal" onClick={() => addLog('Button: normal')}>Normal</MochiButton>
-              <MochiButton
-                type="dropdown"
-                ref={dropdownBtnRef}
-                onClick={openPopup}
-              >
-                Open Popup
-              </MochiButton>
-              <MochiButton type="warning" onClick={() => addLog('Button: warning')}>Warning</MochiButton>
-              <MochiButton type="disabled">Disabled</MochiButton>
+              <Button onClick={() => addLog('Button: normal')}>Normal</Button>
+              <Button type="warning" onClick={() => addLog('Button: warning')}>Warning</Button>
+              <Button type="disabled">Disabled</Button>
+              <Button ref={dropdownBtnRef} type="dropdown" onClick={openPopup}>Open Popup ▾</Button>
             </div>
-          </section>
-
-          {/* ── MochiRadio ───────────────────────────────────────── */}
-          <section className="section">
-            <h2>MochiRadio</h2>
-            <div className="radio-group">
-              {['alpha', 'beta', 'gamma'].map((val) => (
-                <MochiRadio
-                  key={val}
-                  name="choice"
-                  value={val}
-                  checked={selected === val}
-                  onChange={() => { setSelected(val); addLog(`Radio: ${val}`); }}
-                >
-                  {val.charAt(0).toUpperCase() + val.slice(1)}
-                </MochiRadio>
+            <div className="buttons-row" style={{ marginTop: 12 }}>
+              <ViewSelectButton
+                value={viewMode}
+                options={[{ value: 'grid', label: '⊞ Grid' }, { value: 'list', label: '☰ List' }]}
+                onChange={(v) => { setViewMode(v); addLog(`View: ${v}`); }}
+              />
+            </div>
+            <div className="radio-group" style={{ marginTop: 12 }}>
+              {['alpha', 'beta', 'gamma'].map((v) => (
+                <Radio key={v} name="demo" value={v} checked={radioVal === v}
+                  onChange={() => { setRadioVal(v); addLog(`Radio: ${v}`); }}>
+                  {v.charAt(0).toUpperCase() + v.slice(1)}
+                </Radio>
               ))}
             </div>
-            <p style={{ marginTop: 8, color: '#888', fontStyle: 'italic', fontSize: 13 }}>
-              Selected: <strong>{selected}</strong>
-            </p>
           </section>
 
-          {/* ── MochiToggle ─────────────────────────────────────── */}
-          <section className="section toggle-group">
-            <h2>MochiToggle</h2>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-              <MochiToggle
-                checked={isOn}
-                onChange={() => { setIsOn((v) => !v); addLog(`Toggle: ${!isOn ? 'on' : 'off'}`); }}
-              />
-              <span style={{ color: '#555' }}>{isOn ? 'On ✓' : 'Off'}</span>
+          <NubbinDivider />
+
+          {/* ── Toggle & Checkbox ──────────────────────────────────────── */}
+          <section className="section">
+            <h2>Toggle &amp; Checkbox</h2>
+            <div style={{ display: 'flex', gap: 24, alignItems: 'center', flexWrap: 'wrap' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                <Toggle checked={toggleOn} onChange={() => { setToggleOn((v) => !v); addLog(`Toggle: ${!toggleOn ? 'on' : 'off'}`); }} />
+                <span>{toggleOn ? 'On ✓' : 'Off'}</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                <Checkbox checked={checked} onChange={() => { setChecked((v) => !v); addLog(`Checkbox: ${!checked}`); }} />
+                <span>Checkbox {checked ? '☑' : '☐'}</span>
+              </div>
             </div>
           </section>
 
-          {/* ── MochiInput ──────────────────────────────────────── */}
+          <Divider />
+
+          {/* ── Input family ───────────────────────────────────────────── */}
           <section className="section input-group">
-            <h2>MochiInput</h2>
-            <MochiInput placeholder="Default input" />
-            <MochiInput placeholder="Search…" type="search" />
-            <MochiInput placeholder="Password" type="password" />
-            <MochiInput placeholder="Disabled" disabled />
+            <h2>Input / TextArea / RichText</h2>
+            <Input placeholder="Text input" />
+            <Input placeholder="Search…" type="search" />
+            <Input placeholder="Password" type="password" />
+            <Input placeholder="Disabled" disabled />
+            <TextArea placeholder="TextArea — multiline input" rows={3} style={{ marginTop: 8, width: '100%' }} />
+            <div style={{ marginTop: 8 }}>
+              <RichText placeholder="RichText editor" />
+            </div>
           </section>
 
-          {/* ── MochiProgressBar + MochiSlider ──────────────────── */}
+          <Divider />
+
+          {/* ── NumberInput & DateInput ─────────────────────────────────── */}
+          <section className="section">
+            <h2>NumberInput &amp; DateInput</h2>
+            <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
+              <div>
+                <label style={{ fontSize: 13, color: '#666', display: 'block', marginBottom: 4 }}>NumberInput</label>
+                <NumberInput value={numVal} onChange={(v) => { setNumVal(v); addLog(`Number: ${v}`); }} />
+              </div>
+              <div>
+                <label style={{ fontSize: 13, color: '#666', display: 'block', marginBottom: 4 }}>DateInput</label>
+                <DateInput value={dateVal} onChange={(v) => { setDateVal(v); addLog(`Date: ${v}`); }} />
+              </div>
+            </div>
+          </section>
+
+          <Divider />
+
+          {/* ── ProgressBar & Slider ────────────────────────────────────── */}
           <section className="section progress-slider-group">
-            <h2>MochiProgressBar</h2>
-            <p style={{ marginBottom: 8, color: '#666', fontSize: 13 }}>
-              Top bar is tied to the slider below — value: <strong>{sliderVal}%</strong>
-            </p>
-            <MochiProgressBar value={sliderVal} />
-            <MochiProgressBar value={25} color="yellow" height="16px" />
-            <MochiProgressBar value={80} color="red" width="300px" />
-
-            <h2 style={{ marginTop: 28 }}>MochiSlider</h2>
-            <MochiSlider
-              value={sliderVal}
-              onChange={(v) => { setSliderVal(v); addLog(`Slider: ${v}`); }}
-            />
-            <MochiSlider value={38} color="#ffb80d" width="280px" />
-            <MochiSlider value={80} color="#d32f2f" />
+            <h2>ProgressBar (live) &amp; Slider</h2>
+            <p style={{ color: '#666', fontSize: 13, marginBottom: 8 }}>Value: <strong>{sliderVal}%</strong></p>
+            <ProgressBar value={sliderVal} />
+            <ProgressBar value={25} color="yellow" height="16px" />
+            <ProgressBar value={80} color="red" width="300px" />
+            <div style={{ marginTop: 16 }}>
+              <Slider value={sliderVal} onChange={(v) => { setSliderVal(v); addLog(`Slider: ${v}`); }} />
+              <Slider value={38} color="#ffb80d" width="280px" />
+              <Slider value={80} color="#d32f2f" />
+            </div>
           </section>
 
-          {/* ── Spinner ─────────────────────────────────────────── */}
+          <Divider />
+
+          {/* ── Spinner ────────────────────────────────────────────────── */}
           <section className="section spinner-group">
             <h2>Spinner</h2>
             <div className="spinners-row">
-              <div>
-                <p style={{ fontSize: 12, color: '#888', marginBottom: 4 }}>light / normal</p>
-                <Spinner active={true} styleType="light" size="normal" />
-              </div>
-              <div>
-                <p style={{ fontSize: 12, color: '#888', marginBottom: 4 }}>light / large</p>
-                <Spinner active={true} styleType="light" size="large" />
-              </div>
-              <div>
-                <p style={{ fontSize: 12, color: '#888', marginBottom: 4 }}>dark / normal</p>
-                <Spinner active={true} styleType="dark" size="normal" />
-              </div>
-              <div>
-                <p style={{ fontSize: 12, color: '#888', marginBottom: 4 }}>inactive</p>
-                <Spinner active={false} />
-                <span style={{ fontSize: 11, color: '#bbb' }}>(hidden)</span>
-              </div>
+              {[['light', 'normal'], ['light', 'large'], ['dark', 'normal'], ['dark', 'large']].map(([st, sz]) => (
+                <div key={`${st}-${sz}`}>
+                  <p style={{ fontSize: 12, color: '#888', marginBottom: 4 }}>{st}/{sz}</p>
+                  <Spinner active={true} styleType={st} size={sz} />
+                </div>
+              ))}
             </div>
           </section>
 
-          {/* ── Activity Log ────────────────────────────────────── */}
+          <Divider />
+
+          {/* ── Badge ──────────────────────────────────────────────────── */}
+          <section className="section">
+            <h2>Badge</h2>
+            <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center' }}>
+              <Badge>Default</Badge>
+              <Badge variant="success">Success</Badge>
+              <Badge variant="warning">Warning</Badge>
+              <Badge variant="error">Error</Badge>
+              <Badge variant="info">Info</Badge>
+              <Badge count={7}>Notifications</Badge>
+            </div>
+          </section>
+
+          <Divider />
+
+          {/* ── Dropdown ───────────────────────────────────────────────── */}
+          <section className="section">
+            <h2>Dropdown</h2>
+            <Dropdown
+              options={dropdownOptions}
+              value={dropdownVal}
+              placeholder="Select an option…"
+              onChange={(v) => { setDropdownVal(v); addLog(`Dropdown: ${v}`); }}
+            />
+          </section>
+
+          <Divider />
+
+          {/* ── Item ───────────────────────────────────────────────────── */}
+          <section className="section">
+            <h2>Item</h2>
+            <Item label="Full Name" value="Alice Johnson" />
+            <Item label="Role" value="Senior Engineer" />
+            <Item label="Status" value="Active" />
+          </section>
+
+          <Divider />
+
+          {/* ── Lists ──────────────────────────────────────────────────── */}
+          <section className="section">
+            <h2>List / GridList</h2>
+            <List>
+              <ListHeader>Team Members</ListHeader>
+              <ListItem onClick={() => addLog('List: Alice')}>Alice — Engineer</ListItem>
+              <ListItem onClick={() => addLog('List: Bob')}>Bob — Designer</ListItem>
+              <ListItem onClick={() => addLog('List: Carol')}>Carol — PM</ListItem>
+            </List>
+            <div style={{ marginTop: 16 }}>
+              <GridList items={['React', 'Rust', 'TypeScript', 'Wayland', 'Node.js', 'SCSS']}
+                onItemClick={(item) => addLog(`GridList: ${item}`)} />
+            </div>
+          </section>
+
+          <Divider />
+
+          {/* ── Table ──────────────────────────────────────────────────── */}
+          <section className="section">
+            <h2>Table</h2>
+            <Table columns={tableColumns} rows={tableRows} onRowClick={(row) => addLog(`Row: ${row[0]}`)} />
+          </section>
+
+          <Divider />
+
+          {/* ── Pagination ─────────────────────────────────────────────── */}
+          <section className="section">
+            <h2>Pagination</h2>
+            <Pagination
+              currentPage={page}
+              totalPages={8}
+              onPageChange={(p) => { setPage(p); addLog(`Page: ${p}`); }}
+            />
+          </section>
+
+          <Divider />
+
+          {/* ── Collapsable ────────────────────────────────────────────── */}
+          <section className="section">
+            <h2>Collapsable</h2>
+            <Collapsable
+              title="Click to expand"
+              isOpen={!collapsed}
+              onToggle={() => setCollapsed((v) => !v)}
+            >
+              <p style={{ padding: '12px 0', color: '#555' }}>
+                Hidden content revealed when expanded. Can nest any components inside.
+              </p>
+            </Collapsable>
+          </section>
+
+          <Divider />
+
+          {/* ── Dialog ─────────────────────────────────────────────────── */}
+          <section className="section">
+            <h2>Dialog</h2>
+            <Button onClick={() => { setDialogOpen(true); addLog('Dialog: opened'); }}>Open Dialog</Button>
+            <Dialog
+              isOpen={dialogOpen}
+              title="Confirm Action"
+              onClose={() => setDialogOpen(false)}
+              actions={[
+                { label: 'Cancel', onClick: () => { setDialogOpen(false); addLog('Dialog: cancelled'); }, type: 'warning' },
+                { label: 'Confirm', onClick: () => { setDialogOpen(false); addLog('Dialog: confirmed'); } },
+              ]}
+            >
+              <p>Are you sure you want to proceed with this action?</p>
+            </Dialog>
+          </section>
+
+          <Divider />
+
+          {/* ── StackedPanels ──────────────────────────────────────────── */}
+          <section className="section">
+            <h2>StackedPanels</h2>
+            <StackedPanels>
+              <StackedPanel title="Panel One">Content inside panel one.</StackedPanel>
+              <StackedPanel title="Panel Two">Content inside panel two.</StackedPanel>
+              <StackedPanel title="Panel Three">Content inside panel three.</StackedPanel>
+            </StackedPanels>
+          </section>
+
+          <Divider />
+
+          {/* ── Wizard ─────────────────────────────────────────────────── */}
+          <section className="section">
+            <h2>Wizard</h2>
+            <Wizard steps={wizardSteps} currentStep={wizardStep}>
+              <div style={{ padding: '16px 0', color: '#555' }}>
+                Step {wizardStep + 1} of {wizardSteps.length}: <strong>{wizardSteps[wizardStep]}</strong>
+              </div>
+            </Wizard>
+            <div className="buttons-row" style={{ marginTop: 12 }}>
+              <Button onClick={() => { setWizardStep((s) => Math.max(0, s - 1)); addLog('Wizard: back'); }}
+                type={wizardStep === 0 ? 'disabled' : 'normal'}>
+                ← Back
+              </Button>
+              <Button onClick={() => { setWizardStep((s) => Math.min(wizardSteps.length - 1, s + 1)); addLog('Wizard: next'); }}
+                type={wizardStep === wizardSteps.length - 1 ? 'disabled' : 'normal'}>
+                Next →
+              </Button>
+            </div>
+          </section>
+
+          <Divider />
+
+          {/* ── Video (MediaPlayer) ────────────────────────────────────── */}
+          <section className="section">
+            <h2>Video</h2>
+            <Video
+              src="https://www.w3schools.com/html/mov_bbb.mp4"
+              poster="https://www.w3schools.com/html/pic_trulli.jpg"
+              width="100%"
+            />
+          </section>
+
+          <Divider />
+
+          {/* ── SlidingMenu controls ───────────────────────────────────── */}
+          <section className="section">
+            <h2>SlidingMenu</h2>
+            <p style={{ color: '#666', fontSize: 13, marginBottom: 10 }}>
+              Choose a side then click ☰ Menu in the header to slide it open.
+            </p>
+            <div className="buttons-row">
+              {['left', 'right', 'top', 'bottom'].map((pos) => (
+                <Button key={pos} type={menuPosition === pos ? 'normal' : 'dropdown'}
+                  onClick={() => { setMenuPosition(pos); addLog(`Menu position: ${pos}`); }}>
+                  {pos}
+                </Button>
+              ))}
+            </div>
+          </section>
+
+          <Divider />
+
+          {/* ── PopupPanel ─────────────────────────────────────────────── */}
+          <section className="section">
+            <h2>PopupPanel</h2>
+            <p style={{ color: '#666', fontSize: 13, marginBottom: 10 }}>
+              Triggered from the "Open Popup ▾" button in the Button section above.
+            </p>
+          </section>
+
+          <Divider />
+
+          {/* ── Activity Log ───────────────────────────────────────────── */}
           <section className="section">
             <h2>Activity Log</h2>
             <div className="log-container">
-              {log.length === 0 ? (
-                <p className="log-empty">Interact with components above to see events…</p>
-              ) : (
-                log.map((msg, i) => (
-                  <div key={i} className="log-entry">{msg}</div>
-                ))
-              )}
+              {log.length === 0
+                ? <p className="log-empty">Interact with components above to see events…</p>
+                : log.map((msg, i) => <div key={i} className="log-entry">{msg}</div>)
+              }
             </div>
           </section>
+
         </div>
       </SlidingMenu.ContentShifter>
 
-      {/* ── MochiPopupPanel (rendered outside shifter so it stays fixed) */}
-      <MochiPopupPanel
+      {/* PopupPanel outside shifter so it stays fixed */}
+      <PopupPanel
         isOpen={popupOpen}
         onClose={() => setPopupOpen(false)}
         anchorRect={anchorRect}
-        title="Alarm Picker"
+        title="Quick Actions"
         actions={[
           { label: 'Cancel', onClick: () => { setPopupOpen(false); addLog('Popup: cancelled'); }, type: 'warning' },
-          { label: 'Set Alarm', onClick: () => { setPopupOpen(false); addLog('Popup: alarm set!'); } },
+          { label: 'Confirm', onClick: () => { setPopupOpen(false); addLog('Popup: confirmed!'); } },
         ]}
       >
-        <div className="popup-time">
-          11:00 am <span>▼</span>
-        </div>
-      </MochiPopupPanel>
+        <p style={{ padding: '8px 0', color: '#555' }}>Choose an action to proceed.</p>
+      </PopupPanel>
     </>
+  );
+}
+
+// ── Root: wrap everything in ThemeWrapper ─────────────────────────────────────
+function App() {
+  return (
+    <ThemeWrapper>
+      <InnerApp />
+    </ThemeWrapper>
   );
 }
 
