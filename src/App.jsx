@@ -52,6 +52,8 @@ import {
   // Panels
   StackedPanels,
   StackedPanel,
+  Panel,
+  FloatingPanel,
   // Table
   Table,
   // ThemeWrapper
@@ -432,6 +434,96 @@ function InnerApp() {
               <StackedPanel title="Panel Two">Content inside panel two.</StackedPanel>
               <StackedPanel title="Panel Three">Content inside panel three.</StackedPanel>
             </StackedPanels>
+          </section>
+
+          <Divider />
+
+          {/* ── Panel ──────────────────────────────────────────────────── */}
+          <section className="section">
+            <h2>Panel</h2>
+            <p style={{ fontSize: 13, color: '#666', marginBottom: 12 }}>
+              Width-percentage panels — full height of their row container.
+            </p>
+
+            {/* default style row */}
+            <p style={{ fontSize: 12, color: '#888', marginBottom: 6 }}>style="default"</p>
+            <div style={{ display: 'flex', height: 120, gap: 0, marginBottom: 16 }}>
+              <Panel width={25} style="default">
+                <div style={{ padding: 12 }}>
+                  <strong>25%</strong>
+                  <p style={{ fontSize: 12, color: '#666', marginTop: 4 }}>Sidebar</p>
+                </div>
+              </Panel>
+              <Panel width={50} style="default">
+                <div style={{ padding: 12 }}>
+                  <strong>50%</strong>
+                  <p style={{ fontSize: 12, color: '#666', marginTop: 4 }}>Main</p>
+                </div>
+              </Panel>
+              <Panel width={25} style="default">
+                <div style={{ padding: 12 }}>
+                  <strong>25%</strong>
+                  <p style={{ fontSize: 12, color: '#666', marginTop: 4 }}>Detail</p>
+                </div>
+              </Panel>
+            </div>
+
+            {/* shadow style row */}
+            <p style={{ fontSize: 12, color: '#888', marginBottom: 6 }}>style="shadow"</p>
+            <div style={{ display: 'flex', height: 120, gap: 0 }}>
+              <Panel width={33} style="shadow">
+                <div style={{ padding: 12 }}>
+                  <strong>33%</strong>
+                  <p style={{ fontSize: 12, color: '#666', marginTop: 4 }}>Shadow A</p>
+                </div>
+              </Panel>
+              <Panel width={34} style="shadow">
+                <div style={{ padding: 12 }}>
+                  <strong>34%</strong>
+                  <p style={{ fontSize: 12, color: '#666', marginTop: 4 }}>Shadow B</p>
+                </div>
+              </Panel>
+              <Panel width={33} style="shadow">
+                <div style={{ padding: 12 }}>
+                  <strong>33%</strong>
+                  <p style={{ fontSize: 12, color: '#666', marginTop: 4 }}>Shadow C</p>
+                </div>
+              </Panel>
+            </div>
+          </section>
+
+          <Divider />
+
+          {/* ── FloatingPanel ──────────────────────────────────────────── */}
+          <section className="section">
+            <h2>FloatingPanel</h2>
+            <p style={{ fontSize: 13, color: '#666', marginBottom: 12 }}>
+              Fills its container — 16px radius on all corners.
+            </p>
+            <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
+              {/* default */}
+              <div style={{ width: 220, height: 130 }}>
+                <FloatingPanel style="default">
+                  <div style={{ padding: 16 }}>
+                    <strong>Default</strong>
+                    <p style={{ fontSize: 12, color: '#666', marginTop: 6 }}>
+                      Border + flat #F5F5F5 background.
+                    </p>
+                  </div>
+                </FloatingPanel>
+              </div>
+              {/* shadow */}
+              <div style={{ width: 220, height: 130 }}>
+                <FloatingPanel style="shadow">
+                  <div style={{ padding: 16 }}>
+                    <strong>Shadow</strong>
+                    <p style={{ fontSize: 12, color: '#666', marginTop: 6 }}>
+                      Same surface with inset depth shadow.
+                    </p>
+                  </div>
+                </FloatingPanel>
+              </div>
+            </div>
           </section>
 
           <Divider />
