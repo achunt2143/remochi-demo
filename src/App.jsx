@@ -60,6 +60,7 @@ import {
   // Wizard
   Wizard,
 } from 'remochi';
+import 'remochi/css';
 
 import SlidingMenu from './Menu/SlidingMenu';
 import SlidingMenuItem from './Menu/SlidingMenuItem';
@@ -67,7 +68,7 @@ import SlidingMenuItemGroup from './Menu/SlidingMenuItemGroup';
 
 // ── Inner app wrapped by ThemeWrapper ─────────────────────────────────────────
 function InnerApp() {
-  const { theme, setTheme } = useTheme();
+  const { theme, toggleTheme } = useTheme();
 
   // Shared state
   const [log, setLog] = useState([]);
@@ -122,7 +123,11 @@ function InnerApp() {
 
   // Wizard
   const [wizardStep, setWizardStep] = useState(0);
-  const wizardSteps = ['Account', 'Profile', 'Review'];
+  const wizardSteps = [
+  { label: 'Account' },
+  { label: 'Profile' },
+  { label: 'Review' },
+];
 
   // SlidingMenu
   const [menuOpen, setMenuOpen] = useState(false);
@@ -187,7 +192,7 @@ function InnerApp() {
             <h1 className="app-title">Remochi Sampler</h1>
             <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
               <span style={{ fontSize: 13, color: '#888' }}>Theme:</span>
-              <Button onClick={() => { setTheme(theme === 'light' ? 'dark' : 'light'); addLog(`Theme: ${theme === 'light' ? 'dark' : 'light'}`); }}>
+              <Button onClick={() => { toggleTheme(); addLog(`Theme: ${theme === 'light' ? 'dark' : 'light'}`); }}>
                 {theme === 'light' ? '🌙 Dark' : '☀️ Light'}
               </Button>
             </div>
@@ -439,16 +444,6 @@ function InnerApp() {
                 Step {wizardStep + 1} of {wizardSteps.length}: <strong>{wizardSteps[wizardStep]}</strong>
               </div>
             </Wizard>
-            <div className="buttons-row" style={{ marginTop: 12 }}>
-              <Button onClick={() => { setWizardStep((s) => Math.max(0, s - 1)); addLog('Wizard: back'); }}
-                type={wizardStep === 0 ? 'disabled' : 'normal'}>
-                ← Back
-              </Button>
-              <Button onClick={() => { setWizardStep((s) => Math.min(wizardSteps.length - 1, s + 1)); addLog('Wizard: next'); }}
-                type={wizardStep === wizardSteps.length - 1 ? 'disabled' : 'normal'}>
-                Next →
-              </Button>
-            </div>
           </section>
 
           <Divider />
@@ -527,7 +522,7 @@ function InnerApp() {
 // ── Root: wrap everything in ThemeWrapper ─────────────────────────────────────
 function App() {
   return (
-    <ThemeWrapper>
+    <ThemeWrapper defaultTheme="light" fontFamily="Prelude">
       <InnerApp />
     </ThemeWrapper>
   );
