@@ -7,8 +7,8 @@
   display: flex;
   flex-direction: column;
   margin: 0 auto;
-  background-color: #f7f9fc;
-  color: #333;
+  background-color: var(--mochi-bg, #f7f9fc);
+  color: var(--mochi-text, #333);
   -webkit-user-select: none;
   user-select: none;
 }
@@ -25,16 +25,23 @@
 /* Section common styling */
 .section {
   margin-bottom: 36px;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid var(--mochi-border, #ddd);
   padding-bottom: 28px;
   min-height: fit-content;
 }
 
 .section h2 {
+  /* #064663 (a dark navy) reads fine on the original light background but
+     is nearly as dark as the dark-mode page background itself — dark mode
+     gets a lighter override below instead of reusing this literal. */
   color: #064663;
   font-weight: 600;
   margin-bottom: 14px;
   font-size: 1.5rem;
+}
+
+:root[data-mochi-theme='dark'] .section h2 {
+  color: var(--mochi-primary, #5ab8f5);
 }
 
 /* Buttons container */
@@ -115,7 +122,7 @@
   align-items: center;
   gap: 16px;
   padding: 20px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid var(--mochi-border, #ddd);
   margin-bottom: 20px;
 }
 

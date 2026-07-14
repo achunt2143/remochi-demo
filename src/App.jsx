@@ -50,9 +50,8 @@ import {
   // Pagination
   Pagination,
   // Panels
-  StackedPanels,
-  StackedPanel,
-  Panel,
+  RepanelStack,
+  Repanel,
   FloatingPanel,
   // Table
   Table,
@@ -78,6 +77,7 @@ function InnerApp() {
 
   // Button / Popup
   const dropdownBtnRef = useRef(null);
+  const repanelRef = useRef(null);
   const [popupOpen, setPopupOpen] = useState(false);
   const [anchorRect, setAnchorRect] = useState(null);
   const openPopup = () => {
@@ -126,10 +126,10 @@ function InnerApp() {
   // Wizard
   const [wizardStep, setWizardStep] = useState(0);
   const wizardSteps = [
-  { label: 'Account' },
-  { label: 'Profile' },
-  { label: 'Review' },
-];
+    { label: 'Account' },
+    { label: 'Profile' },
+    { label: 'Review' },
+  ];
 
   // SlidingMenu
   const [menuOpen, setMenuOpen] = useState(false);
@@ -193,20 +193,22 @@ function InnerApp() {
             <Button onClick={() => setMenuOpen((v) => !v)}>☰ Menu</Button>
             <h1 className="app-title">Remochi Sampler</h1>
             <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-              <span style={{ fontSize: 13, color: '#888' }}>Theme:</span>
+              <span style={{ fontSize: 13, color: 'var(--mochi-text-muted)' }}>Theme:</span>
               <Button onClick={() => { toggleTheme(); addLog(`Theme: ${theme === 'light' ? 'dark' : 'light'}`); }}>
-                {theme === 'light' ? '🌙 Dark' : '☀️ Light'}
+                {theme === 'light' ? '☀️ Light' : '🌙 Dark'}
               </Button>
             </div>
           </header>
 
           {/* ── Headers ────────────────────────────────────────────────── */}
           <section className="section">
-            <Header>Header Component</Header>
-            <Subheader>Subheader Component — sits below a Header</Subheader>
+            <h1>Header Component — H1</h1>
+            <h2>Subheader Component — H2</h2>
+            <h3>Subheader Component — H3</h3>
+            <h4>Subheader Component — H4</h4>
           </section>
 
-          <Divider />
+
 
           {/* ── Button family ──────────────────────────────────────────── */}
           <section className="section">
@@ -215,13 +217,15 @@ function InnerApp() {
               <Button onClick={() => addLog('Button: normal')}>Normal</Button>
               <Button type="warning" onClick={() => addLog('Button: warning')}>Warning</Button>
               <Button type="disabled">Disabled</Button>
-              <Button ref={dropdownBtnRef} type="dropdown" onClick={openPopup}>Open Popup ▾</Button>
+              <Button ref={dropdownBtnRef} type="dropdown" onClick={openPopup}>Open Popup</Button>
             </div>
             <div className="buttons-row" style={{ marginTop: 12 }}>
               <ViewSelectButton
-                value={viewMode}
-                options={[{ value: 'grid', label: '⊞ Grid' }, { value: 'list', label: '☰ List' }]}
-                onChange={(v) => { setViewMode(v); addLog(`View: ${v}`); }}
+                items={[
+                  { content: '⊞ Grid', value: 'grid', active: viewMode === 'grid' },
+                  { content: '☰ List', value: 'list', active: viewMode === 'list' },
+                ]}
+                onSelect={(item) => { setViewMode(item.value); addLog(`View: ${item.value}`); }}
               />
             </div>
             <div className="radio-group" style={{ marginTop: 12 }}>
@@ -234,7 +238,43 @@ function InnerApp() {
             </div>
           </section>
 
-          <NubbinDivider />
+          <section>
+            <h2>Dividers</h2>
+            {/* ── NubbinDivider — corner variant ──────────────────────────── */}
+            {/* A corner nubbin (borrowed from Popup) marks the END of the
+              line rather than a bump in the middle of it, so it renders
+              with just one cap instead of two. */}
+            <div style={{ margin: '20px 0' }}>
+              <p style={{ fontSize: 12, color: 'var(--mochi-text-muted)', marginBottom: 6 }}>
+                Divider (Gradient from start to center, then center to end)
+              </p>
+              <Divider />
+            </div>
+            {/* ── NubbinDivider — corner variant ──────────────────────────── */}
+            {/* A corner nubbin (borrowed from Popup) marks the END of the
+              line rather than a bump in the middle of it, so it renders
+              with just one cap instead of two. */}
+            <div style={{ margin: '20px 0' }}>
+              <p style={{ fontSize: 12, color: 'var(--mochi-text-muted)', marginBottom: 6 }}>
+                NubbinDivider — middle up variant (single bump; the nubbin sits flush
+                in the middle of the line)
+              </p>
+              <NubbinDivider />
+            </div>
+
+            {/* ── NubbinDivider — corner variant ──────────────────────────── */}
+            {/* A corner nubbin (borrowed from Popup) marks the END of the
+              line rather than a bump in the middle of it, so it renders
+              with just one cap instead of two. */}
+            <div style={{ margin: '20px 0' }}>
+              <p style={{ fontSize: 12, color: 'var(--mochi-text-muted)', marginBottom: 6 }}>
+                NubbinDivider — corner variant (single cap; the nubbin sits flush
+                at the end of the line instead of a bump in the middle)
+              </p>
+              <NubbinDivider nubbin="top-left-up" />
+            </div>
+
+          </section>
 
           {/* ── Toggle & Checkbox ──────────────────────────────────────── */}
           <section className="section">
@@ -273,11 +313,11 @@ function InnerApp() {
             <h2>NumberInput &amp; DateInput</h2>
             <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
               <div>
-                <label style={{ fontSize: 13, color: '#666', display: 'block', marginBottom: 4 }}>NumberInput</label>
+                <label style={{ fontSize: 13, color: 'var(--mochi-text-muted)', display: 'block', marginBottom: 4 }}>NumberInput</label>
                 <NumberInput value={numVal} onChange={(v) => { setNumVal(v); addLog(`Number: ${v}`); }} />
               </div>
               <div>
-                <label style={{ fontSize: 13, color: '#666', display: 'block', marginBottom: 4 }}>DateInput</label>
+                <label style={{ fontSize: 13, color: 'var(--mochi-text-muted)', display: 'block', marginBottom: 4 }}>DateInput</label>
                 <DateInput value={dateVal} onChange={(v) => { setDateVal(v); addLog(`Date: ${v}`); }} />
               </div>
             </div>
@@ -288,7 +328,7 @@ function InnerApp() {
           {/* ── ProgressBar & Slider ────────────────────────────────────── */}
           <section className="section progress-slider-group">
             <h2>ProgressBar (live) &amp; Slider</h2>
-            <p style={{ color: '#666', fontSize: 13, marginBottom: 8 }}>Value: <strong>{sliderVal}%</strong></p>
+            <p style={{ color: 'var(--mochi-text-muted)', fontSize: 13, marginBottom: 8 }}>Value: <strong>{sliderVal}%</strong></p>
             <ProgressBar value={sliderVal} />
             <ProgressBar value={25} color="yellow" height="16px" />
             <ProgressBar value={80} color="red" width="300px" />
@@ -307,7 +347,7 @@ function InnerApp() {
             <div className="spinners-row">
               {[['light', 'normal'], ['light', 'large'], ['dark', 'normal'], ['dark', 'large']].map(([st, sz]) => (
                 <div key={`${st}-${sz}`}>
-                  <p style={{ fontSize: 12, color: '#888', marginBottom: 4 }}>{st}/{sz}</p>
+                  <p style={{ fontSize: 12, color: 'var(--mochi-text-muted)', marginBottom: 4 }}>{st}/{sz}</p>
                   <Spinner active={true} styleType={st} size={sz} />
                 </div>
               ))}
@@ -399,7 +439,7 @@ function InnerApp() {
               isOpen={!collapsed}
               onToggle={() => setCollapsed((v) => !v)}
             >
-              <p style={{ padding: '12px 0', color: '#555' }}>
+              <p style={{ padding: '12px 0', color: 'var(--mochi-text-muted)' }}>
                 Hidden content revealed when expanded. Can nest any components inside.
               </p>
             </Collapsable>
@@ -426,69 +466,145 @@ function InnerApp() {
 
           <Divider />
 
-          {/* ── StackedPanels ──────────────────────────────────────────── */}
+          {/* ── RepanelStack (stacked panels) ─────────────────────────── */}
           <section className="section">
-            <h2>StackedPanels</h2>
-            <StackedPanels>
-              <StackedPanel title="Panel One">Content inside panel one.</StackedPanel>
-              <StackedPanel title="Panel Two">Content inside panel two.</StackedPanel>
-              <StackedPanel title="Panel Three">Content inside panel three.</StackedPanel>
-            </StackedPanels>
+            <h2>RepanelStack — stacked panels</h2>
+            <p style={{ fontSize: 13, color: 'var(--mochi-text-muted)', marginBottom: 12 }}>
+              A webOS/Mochi master-detail stack. The front (active) panel takes the
+              remaining width; earlier panels stay revealed to its left as real,
+              readable columns — <strong>every visible panel is independently
+                scrollable and clickable</strong>, not just the front one. Every panel
+              but the first has a <strong>nubbin grabber</strong> at its bottom-left
+              edge. On a parent panel it's a plain reveal-adjust: drag it to grow or
+              shrink how many columns are shown — it isn't capped at the default
+              3-column window, drag far enough and it reveals the whole stack back
+              to the first panel. The <strong>active panel's own grabber</strong>{' '}
+              does the same reveal-adjust (both directions, as long as there's more
+              to reveal) — that's what lets you get back to an earlier panel even
+              after collapsing all the way down to just the front one. Once nothing
+              is left to reveal, dragging it right instead becomes a{' '}
+              <strong>swipe-to-close</strong>: drag past ~45%, flick it, or
+              double-click it, and the front panel closes, handing the front to
+              whatever was behind it — release short of that and it springs back
+              open. Use the buttons below for the same moves without dragging.
+            </p>
+
+            <div style={{ display: 'flex', gap: 8, marginBottom: 12, flexWrap: 'wrap' }}>
+              <Button onClick={() => repanelRef.current?.prev()}>◀ Prev</Button>
+              <Button onClick={() => repanelRef.current?.next()}>Next ▶</Button>
+              <Button onClick={() => repanelRef.current?.expand()}>Expand</Button>
+              <Button onClick={() => repanelRef.current?.collapse()}>Collapse</Button>
+            </div>
+
+            <div style={{ height: 380 }}>
+              <RepanelStack
+                ref={repanelRef}
+                defaultActiveIndex={3}
+                defaultReveal={3}
+                onActiveIndexChange={(index, detail) =>
+                  addLog(`RepanelStack: front → ${index} (${detail.reason})`)
+                }
+                onRevealChange={(reveal, detail) =>
+                  addLog(`RepanelStack: reveal → ${reveal} (${detail.reason})`)
+                }
+              >
+                {[
+                  {
+                    title: 'Library',
+                    items: ['Recently Added', 'Artists', 'Albums', 'Genres'],
+                  },
+                  {
+                    title: 'Albums',
+                    items: ['Discovery', 'In Rainbows', 'Currents', 'Random Access Memories'],
+                  },
+                  {
+                    title: 'Tracks',
+                    items: ['One More Time', 'Aerodynamic', 'Digital Love', 'Harder Better Faster Stronger'],
+                  },
+                  {
+                    title: 'Now Playing',
+                    body: 'The front panel. Drag its grabber left (or right, if there’s still more to reveal) to adjust the stack behind it — once fully expanded, drag right to close it, or try a flick or double-click.',
+                  },
+                ].map((panel) => (
+                  <Repanel key={panel.title}>
+                    <div style={{ padding: '52px 20px 28px' }}>
+                      <h3 style={{ margin: '0 0 10px' }}>{panel.title}</h3>
+                      {panel.items ? (
+                        <ul style={{ listStyle: 'none', margin: 0, padding: 0, fontSize: 13, color: 'var(--mochi-text)' }}>
+                          {panel.items.map((item) => (
+                            <li
+                              key={item}
+                              style={{ padding: '8px 4px', borderBottom: '1px solid var(--mochi-border)', cursor: 'pointer' }}
+                              onClick={() => addLog(`RepanelStack: clicked "${item}" inside ${panel.title}`)}
+                            >
+                              {item}
+                            </li>
+                          ))}
+                        </ul>
+                      ) : (
+                        <p style={{ fontSize: 13, color: 'var(--mochi-text-muted)', margin: 0 }}>{panel.body}</p>
+                      )}
+                    </div>
+                  </Repanel>
+                ))}
+              </RepanelStack>
+            </div>
           </section>
 
           <Divider />
 
-          {/* ── Panel ──────────────────────────────────────────────────── */}
+          {/* ── Repanel ────────────────────────────────────────────────── */}
           <section className="section">
-            <h2>Panel</h2>
-            <p style={{ fontSize: 13, color: '#666', marginBottom: 12 }}>
-              Width-percentage panels — full height of their row container.
+            <h2>Repanel</h2>
+            <p style={{ fontSize: 13, color: 'var(--mochi-text-muted)', marginBottom: 12 }}>
+              Width-percentage panels — full height of their row container. Also the
+              stackable card surface used inside <code>RepanelStack</code> above.
             </p>
 
             {/* default style row */}
-            <p style={{ fontSize: 12, color: '#888', marginBottom: 6 }}>style="default"</p>
+            <p style={{ fontSize: 12, color: 'var(--mochi-text-muted)', marginBottom: 6 }}>style="default"</p>
             <div style={{ display: 'flex', height: 120, gap: 0, marginBottom: 16 }}>
-              <Panel width={25} style="default">
+              <Repanel width={25} style="default">
                 <div style={{ padding: 12 }}>
                   <strong>25%</strong>
-                  <p style={{ fontSize: 12, color: '#666', marginTop: 4 }}>Sidebar</p>
+                  <p style={{ fontSize: 12, color: 'var(--mochi-text-muted)', marginTop: 4 }}>Sidebar</p>
                 </div>
-              </Panel>
-              <Panel width={50} style="default">
+              </Repanel>
+              <Repanel width={50} style="default">
                 <div style={{ padding: 12 }}>
                   <strong>50%</strong>
-                  <p style={{ fontSize: 12, color: '#666', marginTop: 4 }}>Main</p>
+                  <p style={{ fontSize: 12, color: 'var(--mochi-text-muted)', marginTop: 4 }}>Main</p>
                 </div>
-              </Panel>
-              <Panel width={25} style="default">
+              </Repanel>
+              <Repanel width={25} style="default">
                 <div style={{ padding: 12 }}>
                   <strong>25%</strong>
-                  <p style={{ fontSize: 12, color: '#666', marginTop: 4 }}>Detail</p>
+                  <p style={{ fontSize: 12, color: 'var(--mochi-text-muted)', marginTop: 4 }}>Detail</p>
                 </div>
-              </Panel>
+              </Repanel>
             </div>
 
             {/* shadow style row */}
-            <p style={{ fontSize: 12, color: '#888', marginBottom: 6 }}>style="shadow"</p>
+            <p style={{ fontSize: 12, color: 'var(--mochi-text-muted)', marginBottom: 6 }}>style="shadow"</p>
             <div style={{ display: 'flex', height: 120, gap: 0 }}>
-              <Panel width={33} style="shadow">
+              <Repanel width={33} style="shadow">
                 <div style={{ padding: 12 }}>
                   <strong>33%</strong>
-                  <p style={{ fontSize: 12, color: '#666', marginTop: 4 }}>Shadow A</p>
+                  <p style={{ fontSize: 12, color: 'var(--mochi-text-muted)', marginTop: 4 }}>Shadow A</p>
                 </div>
-              </Panel>
-              <Panel width={34} style="shadow">
+              </Repanel>
+              <Repanel width={34} style="shadow">
                 <div style={{ padding: 12 }}>
                   <strong>34%</strong>
-                  <p style={{ fontSize: 12, color: '#666', marginTop: 4 }}>Shadow B</p>
+                  <p style={{ fontSize: 12, color: 'var(--mochi-text-muted)', marginTop: 4 }}>Shadow B</p>
                 </div>
-              </Panel>
-              <Panel width={33} style="shadow">
+              </Repanel>
+              <Repanel width={33} style="shadow">
                 <div style={{ padding: 12 }}>
                   <strong>33%</strong>
-                  <p style={{ fontSize: 12, color: '#666', marginTop: 4 }}>Shadow C</p>
+                  <p style={{ fontSize: 12, color: 'var(--mochi-text-muted)', marginTop: 4 }}>Shadow C</p>
                 </div>
-              </Panel>
+              </Repanel>
             </div>
           </section>
 
@@ -497,7 +613,7 @@ function InnerApp() {
           {/* ── FloatingPanel ──────────────────────────────────────────── */}
           <section className="section">
             <h2>FloatingPanel</h2>
-            <p style={{ fontSize: 13, color: '#666', marginBottom: 12 }}>
+            <p style={{ fontSize: 13, color: 'var(--mochi-text-muted)', marginBottom: 12 }}>
               Fills its container — 16px radius on all corners.
             </p>
             <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
@@ -506,7 +622,7 @@ function InnerApp() {
                 <FloatingPanel style="default">
                   <div style={{ padding: 16 }}>
                     <strong>Default</strong>
-                    <p style={{ fontSize: 12, color: '#666', marginTop: 6 }}>
+                    <p style={{ fontSize: 12, color: 'var(--mochi-text-muted)', marginTop: 6 }}>
                       Border + flat #F5F5F5 background.
                     </p>
                   </div>
@@ -517,7 +633,7 @@ function InnerApp() {
                 <FloatingPanel style="shadow">
                   <div style={{ padding: 16 }}>
                     <strong>Shadow</strong>
-                    <p style={{ fontSize: 12, color: '#666', marginTop: 6 }}>
+                    <p style={{ fontSize: 12, color: 'var(--mochi-text-muted)', marginTop: 6 }}>
                       Same surface with inset depth shadow.
                     </p>
                   </div>
@@ -532,7 +648,7 @@ function InnerApp() {
           <section className="section">
             <h2>Wizard</h2>
             <Wizard steps={wizardSteps} currentStep={wizardStep}>
-              <div style={{ padding: '16px 0', color: '#555' }}>
+              <div style={{ padding: '16px 0', color: 'var(--mochi-text-muted)' }}>
                 Step {wizardStep + 1} of {wizardSteps.length}: <strong>{wizardSteps[wizardStep]}</strong>
               </div>
             </Wizard>
@@ -555,7 +671,7 @@ function InnerApp() {
           {/* ── SlidingMenu controls ───────────────────────────────────── */}
           <section className="section">
             <h2>SlidingMenu</h2>
-            <p style={{ color: '#666', fontSize: 13, marginBottom: 10 }}>
+            <p style={{ color: 'var(--mochi-text-muted)', fontSize: 13, marginBottom: 10 }}>
               Choose a side then click ☰ Menu in the header to slide it open.
             </p>
             <div className="buttons-row">
@@ -573,7 +689,7 @@ function InnerApp() {
           {/* ── PopupPanel ─────────────────────────────────────────────── */}
           <section className="section">
             <h2>PopupPanel</h2>
-            <p style={{ color: '#666', fontSize: 13, marginBottom: 10 }}>
+            <p style={{ color: 'var(--mochi-text-muted)', fontSize: 13, marginBottom: 10 }}>
               Triggered from the "Open Popup ▾" button in the Button section above.
             </p>
           </section>
@@ -605,7 +721,7 @@ function InnerApp() {
           { label: 'Confirm', onClick: () => { setPopupOpen(false); addLog('Popup: confirmed!'); } },
         ]}
       >
-        <p style={{ padding: '8px 0', color: '#555' }}>Choose an action to proceed.</p>
+        <p style={{ padding: '8px 0', color: 'var(--mochi-text-muted)' }}>Choose an action to proceed.</p>
       </PopupPanel>
     </>
   );

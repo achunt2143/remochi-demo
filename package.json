@@ -8,12 +8,12 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "redoRemochi": "npm uninstall remochi && npm install ./remochi-0.1.4.tgz"
+    "buildRemochi": "npm --prefix ../remochi run build:lib"
   },
   "dependencies": {
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
-    "remochi": "file:remochi-0.1.4.tgz"
+    "remochi": "file:../remochi"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.2",
