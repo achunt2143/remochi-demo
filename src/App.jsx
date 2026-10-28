@@ -60,12 +60,12 @@ import {
   useTheme,
   // Wizard
   Wizard,
+  // SlidingMenu
+  SlidingMenu,
+  SlidingMenuItem,
+  SlidingMenuItemGroup,
 } from 'remochi';
 import 'remochi/css';
-
-import SlidingMenu from './Menu/SlidingMenu';
-import SlidingMenuItem from './Menu/SlidingMenuItem';
-import SlidingMenuItemGroup from './Menu/SlidingMenuItemGroup';
 
 // ── Inner app wrapped by ThemeWrapper ─────────────────────────────────────────
 function InnerApp() {
@@ -126,9 +126,14 @@ function InnerApp() {
   // Wizard
   const [wizardStep, setWizardStep] = useState(0);
   const wizardSteps = [
-    { label: 'Account' },
-    { label: 'Profile' },
-    { label: 'Review' },
+    { label: 'Account', title: 'Create your account', content: <Input placeholder="Username" /> },
+    { label: 'Profile', title: 'Set up your profile', content: <Input placeholder="Display name" /> },
+    {
+      label: 'Review',
+      title: 'Review',
+      description: 'Going back un-completes the step you return to; Finish completes this one.',
+      content: 'Everything look right?',
+    },
   ];
 
   // SlidingMenu
@@ -456,8 +461,8 @@ function InnerApp() {
               title="Confirm Action"
               onClose={() => setDialogOpen(false)}
               actions={[
-                { label: 'Cancel', onClick: () => { setDialogOpen(false); addLog('Dialog: cancelled'); }, type: 'warning' },
-                { label: 'Confirm', onClick: () => { setDialogOpen(false); addLog('Dialog: confirmed'); } },
+                { label: 'Cancel', onClick: () => { setDialogOpen(false); addLog('Dialog: cancelled'); } },
+                { label: 'Confirm', onClick: () => { setDialogOpen(false); addLog('Dialog: confirmed'); }, type: 'affirmative' },
               ]}
             >
               <p>Are you sure you want to proceed with this action?</p>
@@ -647,11 +652,20 @@ function InnerApp() {
           {/* ── Wizard ─────────────────────────────────────────────────── */}
           <section className="section">
             <h2>Wizard</h2>
-            <Wizard steps={wizardSteps} currentStep={wizardStep}>
-              <div style={{ padding: '16px 0', color: 'var(--mochi-text-muted)' }}>
-                Step {wizardStep + 1} of {wizardSteps.length}: <strong>{wizardSteps[wizardStep]}</strong>
-              </div>
-            </Wizard>
+            <Wizard
+              steps={wizardSteps}
+              onStepChange={(step, { reason }) => {
+                setWizardStep(step);
+                addLog(`Wizard: step → ${wizardSteps[step].label} (${reason})`);
+              }}
+              onCompletedStepsChange={(done) =>
+                addLog(`Wizard: completed → ${done.map((i) => wizardSteps[i].label).join(', ') || 'none'}`)
+              }
+              onComplete={() => addLog('Wizard: finished')}
+            />
+            <div style={{ padding: '16px 0', color: 'var(--mochi-text-muted)' }}>
+              Step {wizardStep + 1} of {wizardSteps.length}: <strong>{wizardSteps[wizardStep].label}</strong>
+            </div>
           </section>
 
           <Divider />
